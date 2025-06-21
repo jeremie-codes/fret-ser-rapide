@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Forms\FormsComponent;
+use Filament\Forms\Components;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
@@ -24,28 +25,40 @@ class MessageResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Section::make('')
-                ->schema([
-                    Forms\Components\TextInput::make('fullname')->label('Nom'),
-                    Forms\Components\TextInput::make('email')->label('Email'),
-                    Forms\Components\TextInput::make('sujet')->label('Sujet'),
-                    Forms\Components\Textarea::make('message')->label('Message'),
-                ])->columnSpan(['lg' => 2]),
-                Section::make()
-                    ->schema([
-                        Forms\Components\Placeholder::make('created_at')
-                            ->label('Created at')
-                            ->content(fn (Message $record): ?string => $record->created_at?->diffForHumans()),
+        $isView = $form->getOperation() === 'view';
 
-                        Forms\Components\Placeholder::make('updated_at')
-                            ->label('Last modified at')
-                            ->content(fn (Message $record): ?string => $record->updated_at?->diffForHumans()),
-                    ])
-                    ->columnSpan(['lg' => 1])
-                    ->hidden(fn (?Message $record) => $record === null)
-            ])->columns(3);
+        return $form
+        ->schema([
+            Section::make('')
+                ->schema([
+                    $isView
+                        ? Components\Placeholder::make('fullname')->label('Nom')->content(fn (Message $record) => $record->fullname)
+                            ->columnSpan(['lg' => 1])
+                        : Components\TextInput::make('fullname')->label('Nom'),
+
+                    $isView
+                        ? Components\Placeholder::make('email')->label('Email')->content(fn (Message $record) => $record->email)
+                            ->columnSpan(['lg' => 1])
+                        : Components\TextInput::make('email')->label('Email'),
+
+                    $isView
+                        ? Components\Placeholder::make('sujet')->label('Sujet')->content(fn (Message $record) => $record->sujet)
+                            ->columnSpan(['lg' => 2])
+                        : Components\TextInput::make('sujet')->label('Sujet'),
+                ])
+                ->columns(2)
+                ->columnSpan(['lg' => 2]),
+
+            Section::make('')
+                ->schema([
+                    $isView
+                        ? Components\Placeholder::make('message')->label('Message')->content(fn (Message $record) => strip_tags($record->message)
+                            )->columnSpan(['lg' => 1])
+                        : Components\RichEditor::make('message')->label('Message'),
+                ])
+                ->columnSpan(['lg' => 2]),
+        ])
+        ->columns(2);
     }
 
     public static function table(Table $table): Table
@@ -97,9 +110,9 @@ class MessageResource extends Resource
     {
         return [
             'index' => Pages\ListMessages::route('/'),
-            'create' => Pages\CreateMessage::route('/create'),
+            // 'create' => Pages\CreateMessage::route('/create'),
             'view' => Pages\ViewMessage::route('/{record}'),
-            'edit' => Pages\EditMessage::route('/{record}/edit'),
+            // 'edit' => Pages\EditMessage::route('/{record}/edit'),
         ];
     }
 }

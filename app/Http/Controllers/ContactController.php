@@ -58,6 +58,7 @@ class ContactController extends Controller
             'email'=> $validated['email'],
             'service_id'=> $request->service,
             'comment'=> $validated['message'],
+            'is_visible' => true
            ]);
 
 

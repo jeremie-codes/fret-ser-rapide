@@ -13,7 +13,7 @@ class ViewMessage extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make()->label('Modifier'),
+            // Actions\EditAction::make()->label('Modifier'),
             Actions\DeleteAction::make()->label('Supprimer'),
         ];
     }
