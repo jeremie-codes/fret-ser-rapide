@@ -68,6 +68,7 @@ class MessageResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(static::getModel()::query()->orderByDesc('created_at'))
             ->columns([
                 Tables\Columns\TextColumn::make('email')
                     ->sortable(),
