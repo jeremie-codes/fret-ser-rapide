@@ -43,8 +43,12 @@ class MessageResource extends Resource
 
                     $isView
                         ? Components\Placeholder::make('sujet')->label('Sujet')->content(fn (Message $record) => $record->sujet)
-                            ->columnSpan(['lg' => 2])
+                            ->columnSpan(['lg' => 1])
                         : Components\TextInput::make('sujet')->label('Sujet'),
+                    $isView
+                        ? Components\Placeholder::make('created_at')->label('Réçu depuis')->content(fn (Message $record): ?string => $record->created_at?->diffForHumans())
+                            ->columnSpan(['lg' => 1])
+                        : null,
                 ])
                 ->columns(2)
                 ->columnSpan(['lg' => 2]),
