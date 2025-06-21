@@ -16,6 +16,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Carbon;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
@@ -58,5 +59,10 @@ class AdminPanelProvider extends PanelProvider
             // ->brandLogo(asset('image/icon.png'))
             ->brandLogoHeight('60px')
             ->favicon(asset('image/logo.png'));
+    }
+
+    public function boot(): void
+    {
+        Carbon::setLocale('fr');
     }
 }
