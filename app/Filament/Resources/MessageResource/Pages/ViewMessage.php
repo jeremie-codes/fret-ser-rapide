@@ -14,7 +14,7 @@ class ViewMessage extends ViewRecord
     {
         return [
             // Actions\EditAction::make()->label('Modifier'),
-            // Actions\DeleteAction::make()->label('Supprimer'),
+            Actions\DeleteAction::make()->label('Supprimer'),
         ];
     }
 }
